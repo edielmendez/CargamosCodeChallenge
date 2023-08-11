@@ -7,19 +7,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import mx.com.ediel.mv.cargamoscodechallenge.ui.home.components.MovieCard
+import androidx.navigation.compose.rememberNavController
 import mx.com.ediel.mv.cargamoscodechallenge.ui.home.components.MoviesGrid
+import mx.com.ediel.mv.cargamoscodechallenge.ui.route.NavigationRoutes
 
 @Composable
 fun HomeScreen(
@@ -38,6 +40,16 @@ fun HomeScreen(
                 }
             )
         },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+
+                },
+                backgroundColor = MaterialTheme.colors.primary
+            ) {
+                Icon(imageVector = Icons.Default.Home, contentDescription = "Saved Movies")
+            }
+        },
         scaffoldState = scaffoldState
     ) {
         Column(
@@ -48,8 +60,17 @@ fun HomeScreen(
         ) {
             MoviesGrid(
                 movies = movies,
-                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 32.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 32.dp),
+                onMovieItemClick = {movieId ->
+                    navController.navigate(NavigationRoutes.DetailScreen.route + "/$movieId")
+                }
             )
         }
     }
+}
+
+@Composable
+@Preview(showSystemUi = true, showBackground = true)
+fun HomeScreenPreview(){
+    HomeScreen(navController = rememberNavController())
 }

@@ -11,11 +11,12 @@ import mx.com.ediel.mv.cargamoscodechallenge.ui.home.HomeViewModel
 @Composable
 fun MoviesGrid(
     modifier: Modifier = Modifier,
-    movies: List<Movie>
+    movies: List<Movie>,
+    onMovieItemClick: (Int) -> Unit
 ){
     LazyVerticalGrid(columns = GridCells.Fixed(count = 3), modifier = modifier){
         items(movies){ movie ->
-            MovieCard(movie = movie, onItemClick = {})
+            MovieCard(movie = movie, onItemClick = {onMovieItemClick(movie.id)})
         }
     }
 }

@@ -10,10 +10,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dagger.hilt.android.AndroidEntryPoint
+import mx.com.ediel.mv.cargamoscodechallenge.ui.detail.DetailsMovieScreen
 import mx.com.ediel.mv.cargamoscodechallenge.ui.home.HomeScreen
 import mx.com.ediel.mv.cargamoscodechallenge.ui.route.NavigationRoutes
 import mx.com.ediel.mv.cargamoscodechallenge.ui.theme.CargamosCodeChallengeTheme
@@ -39,22 +42,21 @@ class MainActivity : ComponentActivity() {
                                 navController = navController
                             )
                         }
-                        /*composable(
-                            route = NavigationRoutes.DetailScreen.route + "?characterId={characterId}",
+                        composable(
+                            route = NavigationRoutes.DetailScreen.route + "/{movieId}",
                             arguments = listOf(
                                 navArgument(
-                                    name = "characterId"
+                                    name = "movieId"
                                 ) {
                                     type = NavType.IntType
-                                    defaultValue = 0
                                 }
                             )
                         ) {
-                            DetailScreen(
+                            DetailsMovieScreen(
                                 navController = navController,
-                                character = it.arguments?.getInt("characterId") ?: 0
+                                movieId = it.arguments?.getInt("movieId") ?: 0
                             )
-                        }*/
+                        }
                     }
                 }
             }
