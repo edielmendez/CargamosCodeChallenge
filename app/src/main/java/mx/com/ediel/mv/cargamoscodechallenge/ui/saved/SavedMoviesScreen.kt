@@ -25,51 +25,53 @@ import androidx.navigation.NavController
 import mx.com.ediel.mv.cargamoscodechallenge.ui.home.HomeViewModel
 import mx.com.ediel.mv.cargamoscodechallenge.ui.home.components.MoviesGrid
 import mx.com.ediel.mv.cargamoscodechallenge.ui.route.NavigationRoutes
+import mx.com.ediel.mv.cargamoscodechallenge.ui.saved.components.DefaultTopAppBar
+import mx.com.ediel.mv.cargamoscodechallenge.ui.saved.components.NoSearchResultsFounds
+import mx.com.ediel.mv.cargamoscodechallenge.ui.saved.components.SearchTopAppBar
 
 @Composable
 fun SavedMoviesScreen(
     navController: NavController,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: SavedMoviesViewModel = hiltViewModel()
 ){
     val scaffoldState = rememberScaffoldState()
     //val movies = viewModel.moviesList.collectAsState().value
-    val movies by viewModel.moviesList.collectAsState()
+    val movies by viewModel.matchedMovies.collectAsState()
+    val showSearchBar by viewModel.showSearchBar.collectAsState()
+    val searchText by viewModel.searchText.collectAsState()
 
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Text("Peliculas guardadas")
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Ir hacia atras")
+            when(showSearchBar){
+                true -> SearchTopAppBar(
+                    searchText = searchText,
+                    placeholderText = "Buscar...",
+                    onSearchTextChanged = { viewModel.onSearchTextChanged(it) },
+                    onClearClick = { viewModel.onClearClick(); viewModel.showSearchBar(false) },
+                    onNavigateBack = { navController.popBackStack() },
+                )
+                false -> DefaultTopAppBar(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onSearchIconClick = {
+                        viewModel.showSearchBar(true)
                     }
-                },
-                actions = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Buscar..."
-                        )
-                    }
-                }
-            )
+                )
+            }
         },
         scaffoldState = scaffoldState
     ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            //SearchBar(onSearch = {})
+        if(movies.isEmpty() && searchText.isNotEmpty()){
+            NoSearchResultsFounds(
+                searchText = searchText
+            )
+        }else{
             MoviesGrid(
                 movies = movies,
-                modifier = Modifier.padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 32.dp),
-                onMovieItemClick = { movieId ->
+                modifier = Modifier.padding(it).padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 32.dp),
+                onMovieItemClick = {movieId ->
                     navController.navigate(NavigationRoutes.DetailScreen.route + "/$movieId")
                 }
             )
