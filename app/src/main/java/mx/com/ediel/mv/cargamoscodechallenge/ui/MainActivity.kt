@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import mx.com.ediel.mv.cargamoscodechallenge.ui.detail.DetailsMovieScreen
 import mx.com.ediel.mv.cargamoscodechallenge.ui.home.HomeScreen
 import mx.com.ediel.mv.cargamoscodechallenge.ui.route.NavigationRoutes
+import mx.com.ediel.mv.cargamoscodechallenge.ui.saved.SavedMoviesScreen
 import mx.com.ediel.mv.cargamoscodechallenge.ui.theme.CargamosCodeChallengeTheme
 
 @AndroidEntryPoint
@@ -55,6 +56,11 @@ class MainActivity : ComponentActivity() {
                             DetailsMovieScreen(
                                 navController = navController,
                                 movieId = it.arguments?.getInt("movieId") ?: 0
+                            )
+                        }
+                        composable(route = NavigationRoutes.SavedMoviesScreen.route){
+                            SavedMoviesScreen(
+                                navController = navController
                             )
                         }
                     }
