@@ -69,6 +69,9 @@ fun HomeScreen(
                         .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 32.dp),
                     onMovieItemClick = { movieId ->
                         navController.navigate(NavigationRoutes.DetailScreen.route + "/$movieId")
+                    },
+                    onBottomReached = {
+
                     }
                 )
             }
