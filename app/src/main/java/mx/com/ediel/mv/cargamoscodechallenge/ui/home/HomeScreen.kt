@@ -33,7 +33,7 @@ fun HomeScreen(
 ){
     val scaffoldState = rememberScaffoldState()
 
-    val movies = viewModel.moviesList.collectAsState().value
+    val movies = viewModel.screenState.collectAsState().value
     val screenState = viewModel.screenState.collectAsState().value
 
     Scaffold(
@@ -58,12 +58,12 @@ fun HomeScreen(
     ) {
 
         when (screenState) {
-            is HomeUIState.Loading-> {
+            is ScreenUIState.Loading-> {
                 Loader()
             }
-            is HomeUIState.Success -> {
+            is ScreenUIState.Success -> {
                 MoviesGrid(
-                    movies = movies,
+                    movies = screenState.data,
                     modifier = Modifier
                         .padding(it)
                         .padding(start = 16.dp, top = 2.dp, end = 16.dp, bottom = 2.dp),
@@ -75,7 +75,7 @@ fun HomeScreen(
                     }
                 )
             }
-            is HomeUIState.Error -> {
+            is ScreenUIState.Error -> {
                 ErrorScreen(
                     message = screenState.error,
                     onRetryAction = {

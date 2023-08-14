@@ -35,6 +35,6 @@ data class MovieDTO (
         resume = overview ?: "",
         average = "$voteAverage %",
         averageValue = (voteAverage ?: 0).toDouble() / 10,
-        releaseDate = "2023-06-06"
+        releaseDate = releaseDate ?: ""
     )
 }

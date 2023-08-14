@@ -34,13 +34,13 @@ fun ErrorScreen(
         )
         Button(
             modifier = Modifier.padding(top = 16.dp),
-            onClick = { /* callback */ },
+            onClick =  onRetryAction ,
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color.Black,
                 contentColor = Color.White
             ),
             shape = MaterialTheme.shapes.medium
-        ) { Text("Reintentar") }
+        ) { Text("Regresar") }
 
     }
 }

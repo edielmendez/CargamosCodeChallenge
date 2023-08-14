@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -28,12 +29,12 @@ class HomeViewModel @Inject constructor(
     /*private val _moviesList = MutableStateFlow<List<Movie>>(emptyList())
     val moviesList = _moviesList.asStateFlow()*/
 
-    private val _screenState = MutableStateFlow<HomeUIState<List<Movie>>>(HomeUIState.Loading)
+    private val _screenState = MutableStateFlow<ScreenUIState<List<Movie>>>(ScreenUIState.Loading)
     val screenState = _screenState.asStateFlow()
 
-    //private val moviesList: MutableList<Movie> = mutableListOf()
-    private val _moviesList = MutableStateFlow<MutableList<Movie>>(mutableListOf())
-    val moviesList = _moviesList.asStateFlow()
+    private val moviesList: MutableList<Movie> = mutableListOf()
+    /*private val _moviesList = MutableStateFlow<MutableList<Movie>>(mutableListOf())
+    val moviesList = _moviesList.asStateFlow()*/
 
     private var page = 1
 
@@ -42,21 +43,23 @@ class HomeViewModel @Inject constructor(
     init {
         page = 0
         getMovies()
-        moviesList.value.clear()
+        moviesList.clear()
     }
 
     fun getMovies(){
         job?.cancel()
         page++
-        _screenState.value = HomeUIState.Loading
-        job = repository.getMovies(page).onEach { result ->
+        _screenState.value = ScreenUIState.Loading
+        job = repository.getMovies(page)
+            .flowOn(Dispatchers.IO)
+            .onEach { result ->
             when (result) {
                 is NetworkResult.Success -> {
-                    moviesList.value.addAll(result.data)
-                    _screenState.value = HomeUIState.Success
+                    moviesList.addAll(result.data)
+                    _screenState.value = ScreenUIState.Success(moviesList)
                 }
                 is NetworkResult.Error -> {
-                    _screenState.value = HomeUIState.Error(result.error)
+                    _screenState.value = ScreenUIState.Error(result.error)
                 }
             }
         }.launchIn(viewModelScope)
