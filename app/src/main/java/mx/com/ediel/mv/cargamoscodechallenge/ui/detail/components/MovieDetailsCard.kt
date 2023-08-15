@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import mx.com.ediel.mv.cargamoscodechallenge.R
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.Movie
+import mx.com.ediel.mv.cargamoscodechallenge.ui.models.Movie
 import mx.com.ediel.mv.cargamoscodechallenge.ui.utils.toCustomerFormat
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -65,7 +65,7 @@ fun MovieDetailsCard(
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
-            text = movie.average,
+            text = movie.averageLabel,
             color = Color.DarkGray,
             fontSize = 10.sp,
             textAlign = TextAlign.Center,

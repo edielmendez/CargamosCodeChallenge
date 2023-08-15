@@ -10,10 +10,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.Movie
-import mx.com.ediel.mv.cargamoscodechallenge.ui.home.HomeViewModel
-import mx.com.ediel.mv.cargamoscodechallenge.ui.route.NavigationRoutes
+import mx.com.ediel.mv.cargamoscodechallenge.ui.models.Movie
 
 @Composable
 fun MoviesGrid(

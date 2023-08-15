@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.FakeData
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.Movie
+import mx.com.ediel.mv.cargamoscodechallenge.ui.models.Movie
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,8 +25,8 @@ class SavedMoviesViewModel @Inject constructor(
 
 
     init {
-        allMovies.addAll(FakeData.movies)
-        _matchedMovies.value = FakeData.movies
+        //allMovies.addAll(FakeData.movies)
+        //_matchedMovies.value = FakeData.movies
     }
 
     fun onSearchTextChanged(changedSearchText: String) {

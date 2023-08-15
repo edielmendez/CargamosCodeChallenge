@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.sp
 import mx.com.ediel.mv.cargamoscodechallenge.R
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.FakeData
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.Movie
+import mx.com.ediel.mv.cargamoscodechallenge.ui.models.Movie
 import mx.com.ediel.mv.cargamoscodechallenge.ui.utils.toCustomerFormat
 import java.time.format.TextStyle
 
@@ -42,14 +41,6 @@ fun MovieCard(
                 .clickable { onItemClick(movie) },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            /*Image(
-                modifier = Modifier
-                    .padding(all = 8.dp)
-                    .fillMaxWidth(),
-                painter = painterResource(id = R.drawable.test_image),
-                contentDescription = movie.title,
-                contentScale = ContentScale.Fit
-            )*/
             GlideImage(
                 model = movie.poster,
                 contentDescription = movie.title,
@@ -74,13 +65,4 @@ fun MovieCard(
             )
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun MovieCardPreview(){
-    MovieCard(
-        movie = FakeData.movies[0],
-        onItemClick = {}
-    )
 }

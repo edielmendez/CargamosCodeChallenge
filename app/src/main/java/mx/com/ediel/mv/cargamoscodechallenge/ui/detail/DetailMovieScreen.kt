@@ -27,7 +27,6 @@ import mx.com.ediel.mv.cargamoscodechallenge.R
 import mx.com.ediel.mv.cargamoscodechallenge.ui.common.ErrorScreen
 import mx.com.ediel.mv.cargamoscodechallenge.ui.common.Loader
 import mx.com.ediel.mv.cargamoscodechallenge.ui.detail.components.MovieDetailsCard
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.Movie
 import mx.com.ediel.mv.cargamoscodechallenge.ui.home.HomeScreen
 import mx.com.ediel.mv.cargamoscodechallenge.ui.home.HomeViewModel
 import mx.com.ediel.mv.cargamoscodechallenge.ui.home.ScreenUIState
@@ -42,9 +41,7 @@ fun DetailsMovieScreen(
     viewModel: DetailMovieViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
-    var favorite = remember {
-        mutableStateOf(false)
-    }
+    val favorite by viewModel.isFavorite.collectAsState()
     val screenState = viewModel.screenState.collectAsState().value
     
     LaunchedEffect(key1 = "getMovie" ){
@@ -63,12 +60,12 @@ fun DetailsMovieScreen(
                     Text("Detalles de la película")
                 },
                 actions = {
-                    val painter  = when(favorite.value){
+                    val painter  = when(favorite){
                         true -> painterResource(id = R.drawable.heart)
                         false -> painterResource(id = R.drawable.heart_outline)
                     }
                     IconButton(onClick = {
-                        favorite.value = !favorite.value
+                        viewModel.updateMovie()
                     }) {
                         Icon(
                             painter,
@@ -86,7 +83,9 @@ fun DetailsMovieScreen(
                 Loader()
             }
             is ScreenUIState.Success -> {
-                MovieDetailsCard(modifier = Modifier.padding(it).padding(horizontal = 16.dp, vertical = 16.dp), movie = screenState.data)
+                MovieDetailsCard(modifier = Modifier
+                    .padding(it)
+                    .padding(horizontal = 16.dp, vertical = 16.dp), movie = screenState.data)
             }
             is ScreenUIState.Error -> {
                 ErrorScreen(

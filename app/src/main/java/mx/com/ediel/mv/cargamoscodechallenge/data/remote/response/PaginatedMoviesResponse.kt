@@ -1,7 +1,7 @@
 package mx.com.ediel.mv.cargamoscodechallenge.data.remote.response
 
 import com.google.gson.annotations.SerializedName
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.Movie
+import mx.com.ediel.mv.cargamoscodechallenge.ui.models.Movie
 
 data class PaginatedMoviesResponse(
     @SerializedName("page"          ) var page         : Int?               = null,
@@ -33,8 +33,9 @@ data class MovieDTO (
         title = title ?: "No Title",
         poster = "https://image.tmdb.org/t/p/w500/$posterPath",
         resume = overview ?: "",
-        average = "$voteAverage %",
+        average = voteAverage ?: 0.0,
         averageValue = (voteAverage ?: 0).toDouble() / 10,
+        averageLabel = "$voteAverage %",
         releaseDate = releaseDate ?: ""
     )
 }

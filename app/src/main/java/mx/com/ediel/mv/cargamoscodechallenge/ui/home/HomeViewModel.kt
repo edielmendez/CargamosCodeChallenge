@@ -14,12 +14,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import mx.com.ediel.mv.cargamoscodechallenge.data.remote.AppRepository
 import mx.com.ediel.mv.cargamoscodechallenge.data.remote.response.NetworkResult
-import mx.com.ediel.mv.cargamoscodechallenge.ui.common.ErrorScreen
-import mx.com.ediel.mv.cargamoscodechallenge.ui.common.Loader
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.FakeData
-import mx.com.ediel.mv.cargamoscodechallenge.ui.fake.Movie
-import mx.com.ediel.mv.cargamoscodechallenge.ui.home.components.MoviesGrid
-import mx.com.ediel.mv.cargamoscodechallenge.ui.route.NavigationRoutes
+import mx.com.ediel.mv.cargamoscodechallenge.ui.models.Movie
 import javax.inject.Inject
 
 @HiltViewModel
