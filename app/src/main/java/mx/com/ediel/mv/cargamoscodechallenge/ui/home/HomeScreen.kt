@@ -16,8 +16,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -33,7 +35,7 @@ fun HomeScreen(
 ){
     val scaffoldState = rememberScaffoldState()
 
-    val movies = viewModel.screenState.collectAsState().value
+    //val movies = viewModel.moviesList.collectAsState().value
     val screenState = viewModel.screenState.collectAsState().value
 
     Scaffold(
@@ -51,15 +53,14 @@ fun HomeScreen(
                 },
                 backgroundColor = MaterialTheme.colors.primary
             ) {
-                Icon(imageVector = Icons.Default.Home, contentDescription = "Saved Movies")
+                Icon(painter = painterResource(mx.com.ediel.mv.cargamoscodechallenge.R.drawable.icons8_guardar_cerrar_48), contentDescription = "Saved Movies")
             }
         },
         scaffoldState = scaffoldState
     ) {
 
         when (screenState) {
-            is ScreenUIState.Loading-> {
-                Loader()
+            is ScreenUIState.Loading -> {
             }
             is ScreenUIState.Success -> {
                 MoviesGrid(

@@ -1,15 +1,17 @@
 package mx.com.ediel.mv.cargamoscodechallenge.ui.saved
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
+import mx.com.ediel.mv.cargamoscodechallenge.data.remote.AppRepository
 import mx.com.ediel.mv.cargamoscodechallenge.ui.models.Movie
 import javax.inject.Inject
 
 @HiltViewModel
 class SavedMoviesViewModel @Inject constructor(
-
+    private val repository: AppRepository
 ): ViewModel() {
     private val _showSearchBar = MutableStateFlow(false)
     val showSearchBar = _showSearchBar.asStateFlow()
@@ -21,12 +23,24 @@ class SavedMoviesViewModel @Inject constructor(
     private val _matchedMovies = MutableStateFlow<List<Movie>>(emptyList())
     val matchedMovies = _matchedMovies.asStateFlow()
 
-    private var allMovies: ArrayList<Movie> = arrayListOf()
+    private var allMovies: List<Movie> = emptyList()
+
+    private var job: Job? = null
 
 
     init {
         //allMovies.addAll(FakeData.movies)
         //_matchedMovies.value = FakeData.movies
+        getMovies()
+    }
+
+    private fun getMovies(){
+        job?.cancel()
+        job = repository.getLocalMovies()
+            .onEach {
+            allMovies = it
+                _matchedMovies.value = allMovies
+            }.launchIn(viewModelScope)
     }
 
     fun onSearchTextChanged(changedSearchText: String) {

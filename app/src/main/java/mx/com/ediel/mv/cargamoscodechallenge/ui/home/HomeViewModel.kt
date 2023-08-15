@@ -28,8 +28,8 @@ class HomeViewModel @Inject constructor(
     val screenState = _screenState.asStateFlow()
 
     private val moviesList: MutableList<Movie> = mutableListOf()
-    /*private val _moviesList = MutableStateFlow<MutableList<Movie>>(mutableListOf())
-    val moviesList = _moviesList.asStateFlow()*/
+    //private val _moviesList = MutableStateFlow<List<Movie>>(emptyList())
+    //val moviesList = _moviesList.asStateFlow()
 
     private var page = 1
 
@@ -44,19 +44,24 @@ class HomeViewModel @Inject constructor(
     fun getMovies(){
         job?.cancel()
         page++
-        _screenState.value = ScreenUIState.Loading
         job = repository.getMovies(page)
             .flowOn(Dispatchers.IO)
             .onEach { result ->
             when (result) {
                 is NetworkResult.Success -> {
                     moviesList.addAll(result.data)
-                    _screenState.value = ScreenUIState.Success(moviesList)
+                    _screenState.update {
+                        ScreenUIState.Success(moviesList)
+                    }
                 }
                 is NetworkResult.Error -> {
                     _screenState.value = ScreenUIState.Error(result.error)
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    private fun getMoviesFirstLoad(){
+
     }
 }

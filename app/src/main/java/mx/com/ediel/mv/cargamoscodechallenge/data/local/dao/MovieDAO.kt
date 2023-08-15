@@ -15,7 +15,7 @@ interface MovieDAO {
     @Query("SELECT * FROM movies WHERE id = :id")
     fun getMovie(id: Int): MovieEntity?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun saveMovie(movie: MovieEntity)
 
     @Query("DELETE FROM movies WHERE id = :id")

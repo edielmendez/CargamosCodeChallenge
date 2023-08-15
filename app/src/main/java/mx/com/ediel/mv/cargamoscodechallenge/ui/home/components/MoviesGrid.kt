@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.flow.distinctUntilChanged
 import mx.com.ediel.mv.cargamoscodechallenge.ui.models.Movie
 
 @Composable
@@ -30,19 +31,22 @@ fun MoviesGrid(
             }
         }
     }
-    gridState.OnBottomReached {
-        onBottomReached()
-    }
+    gridState.OnBottomReached(
+        loadMore = {
+            onBottomReached()
+        }
+    )
 }
 
 
 
 @Composable
 fun LazyGridState.OnBottomReached(
-    loadMore : () -> Unit
+    loadMore : () -> Unit,
+    buffer: Int = 2
 ){
     // state object which tells us if we should load more
-    val shouldLoadMore = remember {
+    /*val shouldLoadMore = remember {
         derivedStateOf {
 
             // get last visible item
@@ -55,14 +59,23 @@ fun LazyGridState.OnBottomReached(
             // Check if last visible item is the last item in the list
             lastVisibleItem.index == layoutInfo.totalItemsCount - 1
         }
+    }*/
+    val shouldLoadMore = remember {
+        derivedStateOf {
+            val layoutInfo = this.layoutInfo
+            val totalItems = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
+            lastVisibleItemIndex > (totalItems - buffer)
+        }
     }
 
     // Convert the state into a cold flow and collect
     LaunchedEffect(shouldLoadMore){
         snapshotFlow { shouldLoadMore.value }
+            .distinctUntilChanged()
             .collect {
-                // if should load more, then invoke loadMore
-                if (it) loadMore()
+                if(it)
+                    loadMore()
             }
     }
 }
